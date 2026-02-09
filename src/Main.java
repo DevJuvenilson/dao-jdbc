@@ -18,4 +18,10 @@ void main() {
         IO.println(seller1);
     }
 
+    IO.println("=== TEST 3 : seller findAll ===");
+    list = sellerDao.findAll();
+    for (Seller seller1 : list) {
+        IO.println(seller1);
+    }
+
 }
