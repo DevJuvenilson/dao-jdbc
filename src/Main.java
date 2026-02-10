@@ -29,4 +29,9 @@ void main() {
     sellerDao.insert(newSeller);
     IO.println("Inserted! New id = " + newSeller.getId());
 
+    IO.println("=== TEST 5 : seller update ===");
+    seller = sellerDao.findById(1);
+    seller.setName("Martha");
+    sellerDao.update(seller);
+    IO.println("Update completed!");
 }
