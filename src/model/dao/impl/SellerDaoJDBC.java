@@ -12,18 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SellerDaoJDBC implements SellerDao {
-
-    private Connection connection;
-
-    public SellerDaoJDBC(Connection connection){
-        this.connection = connection;
-    }
+public record SellerDaoJDBC(Connection connection) implements SellerDao {
 
     @Override
     public void insert(Seller seller) {
         PreparedStatement statement = null;
-        try{
+        try {
             statement = connection.prepareStatement(
                     "INSERT INTO seller "
                             + "(Name, Email, BirthDate, BaseSalary, DepartmentId)  "
@@ -47,14 +41,12 @@ public class SellerDaoJDBC implements SellerDao {
                     seller.setId(id);
                 }
                 DB.closeResultSet(resultSet);
-            } else{
+            } else {
                 throw new DbException("Unexpected error! No rows affected!");
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        }
-        finally {
+        } finally {
             DB.closeStatement(statement);
         }
     }
@@ -62,7 +54,7 @@ public class SellerDaoJDBC implements SellerDao {
     @Override
     public void update(Seller seller) {
         PreparedStatement statement = null;
-        try{
+        try {
             statement = connection.prepareStatement(
                     "UPDATE seller "
                             + "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? "
@@ -77,11 +69,9 @@ public class SellerDaoJDBC implements SellerDao {
             statement.setInt(6, seller.getId());
 
             statement.executeUpdate();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        }
-        finally {
+        } finally {
             DB.closeStatement(statement);
         }
     }
@@ -90,22 +80,20 @@ public class SellerDaoJDBC implements SellerDao {
     public void deleteById(Integer id) {
         PreparedStatement statement = null;
 
-        try{
+        try {
             statement = connection.prepareStatement("DELETE FROM seller WHERE Id = ?");
 
             statement.setInt(1, id);
 
             int rows = statement.executeUpdate();
 
-            if (rows == 0){
+            if (rows == 0) {
                 throw new DbException("Unexpected error! Seller not found!");
             }
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        }
-        finally {
+        } finally {
             DB.closeStatement(statement);
         }
     }
@@ -115,7 +103,7 @@ public class SellerDaoJDBC implements SellerDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
-        try{
+        try {
             statement = connection.prepareStatement(
                     "SELECT seller.*,department.Name as DepName " +
                             "FROM seller INNER JOIN department " +
@@ -128,19 +116,16 @@ public class SellerDaoJDBC implements SellerDao {
 
             if (resultSet.next()) {
                 Department department = instantiateDepartment(resultSet);
-                Seller seller = instantiateSeller(resultSet, department);
 
-                return seller;
+                return instantiateSeller(resultSet, department);
 
             } else {
                 return null;
             }
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        }
-        finally {
+        } finally {
             DB.closeStatement(statement);
             DB.closeResultSet(resultSet);
         }
@@ -171,7 +156,7 @@ public class SellerDaoJDBC implements SellerDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
-        try{
+        try {
             statement = connection.prepareStatement(
                     "SELECT seller.*,department.Name as DepName " +
                             "FROM seller INNER JOIN department " +
@@ -199,11 +184,9 @@ public class SellerDaoJDBC implements SellerDao {
 
             return list;
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        }
-        finally {
+        } finally {
             DB.closeStatement(statement);
             DB.closeResultSet(resultSet);
         }
@@ -214,7 +197,7 @@ public class SellerDaoJDBC implements SellerDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
-        try{
+        try {
             statement = connection.prepareStatement(
                     "SELECT seller.*,department.Name as DepName " +
                             "FROM seller INNER JOIN department " +
