@@ -47,10 +47,14 @@ void main() {
 //    departmentDao.insert(newDepartment);
 //    IO.println("Inserted! New id = " + newDepartment.getId());
 
-    IO.println("=== TEST 5 : seller update ===");
-    Department department = departmentDao.findById(1);
-    IO.println(department);
-    department.setName("Computers");
-    departmentDao.update(department);
-    IO.println("Update completed!");
+//    IO.println("=== TEST 2 : department update and findById ===");
+//    Department department = departmentDao.findById(1);
+//    IO.println(department);
+//    department.setName("Computers");
+//    departmentDao.update(department);
+//    IO.println("Update completed!");
+
+//    IO.println("=== TEST 3 : department delete ===");
+//    departmentDao.deleteById(6);
+//    IO.println("Department deleted!");
 }

@@ -68,7 +68,25 @@ public record DepartmentDaoJDBC(Connection connection) implements DepartmentDao 
 
     @Override
     public void deleteById(Integer id) {
+        PreparedStatement statement = null;
 
+        try {
+            statement = connection.prepareStatement("DELETE FROM department WHERE Id = ?");
+
+            statement.setInt(1, id);
+
+            int rows = statement.executeUpdate();
+
+            if (rows == 0) {
+                throw new DbException("Unexpected error! Department not found!");
+            }
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(statement);
+        }
     }
 
     @Override
