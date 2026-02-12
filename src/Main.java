@@ -1,4 +1,5 @@
 import model.dao.DaoFactory;
+import model.dao.DepartmentDao;
 import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
@@ -35,7 +36,14 @@ void main() {
 //    sellerDao.update(seller);
 //    IO.println("Update completed!");
 
-    IO.println("=== TEST 6 : seller delete ===");
-    sellerDao.deleteById(10);
-    IO.println("User deleted!");
+//    IO.println("=== TEST 6 : seller delete ===");
+//    sellerDao.deleteById(10);
+//    IO.println("User deleted!");
+
+    DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
+
+    IO.println("=== TEST 1 : department insert ===");
+    Department newDepartment = new Department(null, "Greg");
+    departmentDao.insert(newDepartment);
+    IO.println("Inserted! New id = " + newDepartment.getId());
 }
