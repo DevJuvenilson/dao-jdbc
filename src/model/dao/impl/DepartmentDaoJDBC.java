@@ -47,7 +47,23 @@ public record DepartmentDaoJDBC(Connection connection) implements DepartmentDao 
 
     @Override
     public void update(Department department) {
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(
+                    "UPDATE department "
+                            + "SET Name = ?"
+                            + "WHERE Id = ?"
+            );
 
+            statement.setString(1, department.getName());
+            statement.setInt(2, department.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(statement);
+        }
     }
 
     @Override
@@ -57,7 +73,37 @@ public record DepartmentDaoJDBC(Connection connection) implements DepartmentDao 
 
     @Override
     public Department findById(Integer id) {
-        return null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            statement = connection.prepareStatement(
+                    "SELECT * FROM department WHERE Id = ?"
+            );
+
+            statement.setInt(1, id);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return instantiateDepartment(resultSet);
+            } else {
+                return null;
+            }
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(statement);
+            DB.closeResultSet(resultSet);
+        }
+    }
+
+    private Department instantiateDepartment(ResultSet resultSet) throws SQLException {
+        Department department = new Department();
+        department.setId(resultSet.getInt("Id"));
+        department.setName(resultSet.getString("Name"));
+
+        return department;
     }
 
     @Override

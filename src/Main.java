@@ -42,8 +42,15 @@ void main() {
 
     DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
 
-    IO.println("=== TEST 1 : department insert ===");
-    Department newDepartment = new Department(null, "Greg");
-    departmentDao.insert(newDepartment);
-    IO.println("Inserted! New id = " + newDepartment.getId());
+//    IO.println("=== TEST 1 : department insert ===");
+//    Department newDepartment = new Department(null, "Greg");
+//    departmentDao.insert(newDepartment);
+//    IO.println("Inserted! New id = " + newDepartment.getId());
+
+    IO.println("=== TEST 5 : seller update ===");
+    Department department = departmentDao.findById(1);
+    IO.println(department);
+    department.setName("Computers");
+    departmentDao.update(department);
+    IO.println("Update completed!");
 }
