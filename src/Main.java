@@ -55,6 +55,12 @@ void main() {
 //    IO.println("Update completed!");
 
 //    IO.println("=== TEST 3 : department delete ===");
-//    departmentDao.deleteById(6);
+//    departmentDao.deleteById(5);
 //    IO.println("Department deleted!");
+
+//    IO.println("=== TEST 4 : department findAll ===");
+//    List<Department> list = departmentDao.findAll();
+//    for (Department department : list) {
+//        IO.println(department);
+//    }
 }

@@ -4,9 +4,13 @@ import db.DB;
 import db.DbException;
 import model.dao.DepartmentDao;
 import model.entities.Department;
+import model.entities.Seller;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public record DepartmentDaoJDBC(Connection connection) implements DepartmentDao {
 
@@ -126,6 +130,30 @@ public record DepartmentDaoJDBC(Connection connection) implements DepartmentDao 
 
     @Override
     public List<Department> findAll() {
-        return List.of();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            statement = connection.prepareStatement(
+                    "SELECT * FROM department ORDER BY Id "
+            );
+
+            resultSet = statement.executeQuery();
+
+            List<Department> list = new ArrayList<>();
+
+            while (resultSet.next()) {
+                Department department = instantiateDepartment(resultSet);
+                list.add(department);
+            }
+
+            return list;
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(statement);
+            DB.closeResultSet(resultSet);
+        }
     }
 }
